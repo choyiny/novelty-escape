@@ -12,6 +12,11 @@
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/main.css">
     <link rel="shortcut icon" href="favicon.png" type="image/png" />
+    <style>
+        .click-me {
+            background-color: white;
+        }
+    </style>
 </head>
 
 <body>
@@ -67,7 +72,7 @@ $(document).ready(function () {
     });
     
     // we want to query the number of users every 2 seconds
-    setInterval(function() {
+    var repeating_func = setInterval(function() {
         $.get(SERVER_URL + "/status", function(data) {
             var total = +data['result']
             $(".number-of-people").text(total + "/3")
@@ -80,7 +85,10 @@ $(document).ready(function () {
                     $(".big-title").text("A");
                 } else if (my_sequence == 1) {
                     $(".big-title").text("RT");
+                } else {
+                    $(".big-title").text("HAHAHAHAHAAHAHAHAHA TOO LATE");
                 }
+                clearInterval(repeating_func);
             }
 
         });

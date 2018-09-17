@@ -18,7 +18,7 @@ def enter():
     user_id = request.args.get('id')
     peopledict[user_id] = time.time()
 
-    response = jsonify({"success": True})
+    response = jsonify({"your_sequence": len(peopledict)})
     response.headers.add('Access-Control-Allow-Origin', '*')
     return response
 
@@ -39,6 +39,6 @@ def status():
     for user_id in things_to_del:
         del peopledict[user_id]
 
-    response = jsonify({'result':len(peopledict)})
+    response = jsonify({'result': len(peopledict)})
     response.headers.add('Access-Control-Allow-Origin', '*')
     return response
