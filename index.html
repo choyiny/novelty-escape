@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="ESCAPE ME">
+    <meta name="author" content="Novelty">
+    <title>TechMastary</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Roboto:300,100' rel='stylesheet' type='text/css'>
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/main.css">
+    <link rel="shortcut icon" href="favicon.png" type="image/png" />
+</head>
+
+<body>
+    <section class="section text-shadows" id="hello">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-10 col-lg-10 col-md-offset-1 col-lg-offset-1 text-center">
+                    <h1 class="title">ESCAPE ME</h1>
+                    <h2 class="title number-of-people">0/3</h2>
+                    <button class="btn btn-lg click-me">CLICK ME</button>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+
+</html>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<script>
+// SERVER URL
+var SERVER_URL = "http://localhost:5000"
+
+$(document).ready(function () {
+    var user_id;
+    // generate a unique user id if it does not already exist in localstorage
+    if (localStorage.getItem("user_id")) {
+        user_id = localStorage.getItem("user_id");
+    } else {
+        user_id = Date.now()
+        localStorage.setItem("user_id", user_id)
+    }
+    
+    // click listener for the button, which supposedly increments the server online count
+    $(".click-me").click(function() {
+        var $btn = $(this);
+        // disable button
+        $btn.attr("disabled", true);
+        // enable after 5 seconds
+        setTimeout(function () {
+            $btn.attr("disabled", false);
+        }, 5000);
+        // send a get request to server
+        $.get(SERVER_URL + "?id=" + user_id);
+    });
+    
+    // we want to query the number of users every 2 seconds
+    setInterval(function() {
+        $.get(SERVER_URL + "/status", function(data) {
+            var result = +data['result']
+            $(".number-of-people").text(result + "/3")
+        });
+    }, 1000);
+});
+    
+
+</script>
