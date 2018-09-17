@@ -28,12 +28,17 @@ def status():
     Check every user's request time and compare with
     current time, if now - start > 10, remove this
     user from the dict"""
+    things_to_del = set()
     for user_id in peopledict:
         request_time = peopledict[user_id]
-        if time.time() - request_time > 10:
-            peopledict.pop(user_id)
-    return {'result':len(peopledict)}
+        if time.time() - request_time > 2:
+            # everything need to del in dict
+            things_to_del.add(user_id)
+    
+    # del everything that needs to be deleted HAHA
+    for user_id in things_to_del:
+        del peopledict[user_id]
 
-    response = jsonify(result_dict)
+    response = jsonify({'result':len(peopledict)})
     response.headers.add('Access-Control-Allow-Origin', '*')
     return response

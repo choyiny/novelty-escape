@@ -61,7 +61,7 @@ $(document).ready(function () {
             $btn.attr("disabled", false);
         }, 5000);
         // send a get request to server
-        $.get(SERVER_URL + "?id=" + user_id, function () {
+        $.get(SERVER_URL + "?id=" + user_id, function (data) {
             my_sequence = +data['your_sequence'];
         });
     });
@@ -82,8 +82,7 @@ $(document).ready(function () {
                     $(".big-title").text("RT");
                 }
             }
-            
-            
+
         });
     }, 1000);
 });
