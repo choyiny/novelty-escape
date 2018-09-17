@@ -19,7 +19,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-10 col-lg-10 col-md-offset-1 col-lg-offset-1 text-center">
-                    <h1 class="title">ESCAPE ME</h1>
+                    <h1 class="title big-title">ESCAPE ME</h1>
                     <h2 class="title number-of-people">0/3</h2>
                     <button class="btn btn-lg click-me">CLICK ME</button>
                 </div>
@@ -36,7 +36,13 @@
 var SERVER_URL = "http://localhost:5000"
 
 $(document).ready(function () {
+    
+    // define the user id
     var user_id;
+    
+    // define the sequence i am currently at
+    var my_sequence;
+    
     // generate a unique user id if it does not already exist in localstorage
     if (localStorage.getItem("user_id")) {
         user_id = localStorage.getItem("user_id");
@@ -55,14 +61,29 @@ $(document).ready(function () {
             $btn.attr("disabled", false);
         }, 5000);
         // send a get request to server
-        $.get(SERVER_URL + "?id=" + user_id);
+        $.get(SERVER_URL + "?id=" + user_id, function () {
+            my_sequence = +data['your_sequence'];
+        });
     });
     
     // we want to query the number of users every 2 seconds
     setInterval(function() {
         $.get(SERVER_URL + "/status", function(data) {
-            var result = +data['result']
-            $(".number-of-people").text(result + "/3")
+            var total = +data['result']
+            $(".number-of-people").text(total + "/3")
+            
+            if (total >= 3) {
+                // depending on the sequence, show the corresponding password
+                if (my_sequence == 3) {
+                    $(".big-title").text("ST");
+                } else if (my_sequence == 2) {
+                    $(".big-title").text("A");
+                } else if (my_sequence == 1) {
+                    $(".big-title").text("RT");
+                }
+            }
+            
+            
         });
     }, 1000);
 });

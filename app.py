@@ -21,7 +21,7 @@ def enter():
     user_id = request.args.get('id')
     peopleset.add(user_id)
     
-    response = jsonify({"success": True})
+    response = jsonify({"your_sequence": len(peopleset)})
     response.headers.add('Access-Control-Allow-Origin', '*')
     return response
 
