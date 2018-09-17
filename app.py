@@ -1,12 +1,17 @@
 import time
-from flask import Flask
-from flask import request
+import json
+from flask import Flask, request, jsonify
 app = Flask(__name__)
 
 starttime = -1
 peopleset = set()
 
-@app.route("/")
+# cors
+from datetime import timedelta
+from flask import make_response, request, current_app
+from functools import update_wrapper
+
+@app.route("/", methods=["GET"])
 def enter():
     """When user send request to website,
     get his unique id and save it in the
@@ -15,6 +20,10 @@ def enter():
         starttime = time.time()
     user_id = request.args.get('id')
     peopleset.add(user_id)
+    
+    response = jsonify({"success": True})
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    return response
 
 @app.route("/status")
 def status():
@@ -26,4 +35,7 @@ def status():
         if not time.time() - starttime <= 10:
             peopleset.clear()
     result_dict['result'] = len(peopleset)
-    return result_dict
+    
+    response = jsonify(result_dict)
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    return response
