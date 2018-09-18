@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="ESCAPE ME">
+    <meta name="author" content="Novelty">
+    <title>TechMastary</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Roboto:300,100' rel='stylesheet' type='text/css'>
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css')}}">
+    <link rel="shortcut icon" href="favicon.png" type="image/png" />
+</head>
+
+<body>
+    <section class="section text-shadows" id="hello">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-10 col-lg-10 col-md-offset-1 col-lg-offset-1 text-center">
+                    <h1 class="title big-title">ESCAPE ME</h1>
+                    <h2 class="title number-of-people">0/3</h2>
+                    <button onclick="receive_input()" class="btn btn-lg click-me">CLICK ME</button>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+
+</html>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
+<script>
+var SERVER_URL = "http://localhost:5000"
+
+// Create connection with socketio
+var socket = io.connect(SERVER_URL);
+
+// The unique ID, I dont know how to implement this
+// in JS lol
+var id = 1
+
+// Request url when the button is clicked
+function receive_input(){
+  $.get(SERVER_URL + "/click?id="+id);
+  id += 1
+}
+
+// Event handler
+socket.on('response', function(res){
+  // res.data is a number that represents the
+  // number of users that clicked the button
+  $(".number-of-people").text(res.data + "/3");
+})
+
+</script>

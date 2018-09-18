@@ -1,44 +1,53 @@
 import time
 import json
-from flask import Flask, request, jsonify
+import threading
+from flask import Flask, request, render_template
+from flask_socketio import SocketIO
+import time
 app = Flask(__name__)
+socketio = SocketIO(app)
 
-peopledict = {}
+user_set = set()
+delay = 5
 
 # cors
 from datetime import timedelta
 from flask import make_response, request, current_app
 from functools import update_wrapper
 
-@app.route("/", methods=["GET"])
-def enter():
-    """When user send request to website,
-    get his unique id and save it in the
-    set"""
+@app.route("/")
+def home():
+    return render_template('index.html')
+
+@app.route("/click")
+def click_btn():
+    "Trigger a timer every time when the button is clicked"
+    create_timer()
+    return render_template('index.html')
+
+def create_timer():
+    """When user send request, get his
+    unique ID, save it in a set and initialize
+    a timer for him, after a short delay, the
+    remove_user method will be invoked to delete
+    this user from the set.
+    EACH USER HAS A UNIQUE TIMER"""
     user_id = request.args.get('id')
-    peopledict[user_id] = time.time()
+    print(user_id)
+    user_set.add(user_id)
+    send_to()
+    # Start timer
+    threading.Timer(delay, remove_user, [user_id]).start()
 
-    response = jsonify({"success": True})
-    response.headers.add('Access-Control-Allow-Origin', '*')
-    return response
+def remove_user(user_id):
+    """Remove a user from the set by his id"""
+    if user_id in user_set:
+        user_set.remove(user_id)
+    send_to()
 
-@app.route("/status")
-def status():
-    """For every call, iterate through the dict.
-    Check every user's request time and compare with
-    current time, if now - start > 10, remove this
-    user from the dict"""
-    things_to_del = set()
-    for user_id in peopledict:
-        request_time = peopledict[user_id]
-        if time.time() - request_time > 2:
-            # everything need to del in dict
-            things_to_del.add(user_id)
-    
-    # del everything that needs to be deleted HAHA
-    for user_id in things_to_del:
-        del peopledict[user_id]
-
-    response = jsonify({'result':len(peopledict)})
-    response.headers.add('Access-Control-Allow-Origin', '*')
-    return response
+def send_to():
+    """Whenever we added a user to the set or
+    deleted a user from the set, we emit event
+    to the page to update the variable
+    """
+    socketio.emit('response', {'data':len(user_set)})
