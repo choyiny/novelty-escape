@@ -13,11 +13,8 @@
     <link rel="stylesheet" href="assets/css/main.css">
     <link rel="shortcut icon" href="favicon.png" type="image/png" />
     <style>
-        .click-me {
-            height: 250px;
-            width: 250px;
-            border-radius: 1000px;
-            background-color: #651717;
+        .number-of-people {
+            font-size: 200px;
         }
     </style>
 </head>
@@ -27,8 +24,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-10 col-lg-10 col-md-offset-1 col-lg-offset-1 text-center">
-                    <h1 class="title big-title">ESCAPE ME</h1>
-                    <button class="click-me"></button>
+                    <h1 class="title number-of-people">0/3</h1>
                 </div>
             </div>
         </div>
@@ -41,31 +37,9 @@
 <script>
 // SERVER URL
 var SERVER_URL = "https://novelty-escape.herokuapp.com"
-//var SERVER_URL = "http://localhost:5000"
 
 $(document).ready(function () {
-    
-    var url = window.location.href;
-    var name = url.match(/seq=(.*)/);
-    var playerNumber;
-    if (name === null) {
-        $(".big-title").text("find the correct QR code.");
-    } else {
-        playerNumber = name[1];
-    }
-    
-    // click listener for the button, which supposedly increments the server online count
-    $(".click-me").click(function() {
-        var $btn = $(this);
-        // disable button
-        $btn.attr("disabled", true);
-        // enable after 5 seconds
-        setTimeout(function () {
-            $btn.attr("disabled", false);
-        }, 5000);
-        // send a get request to server
-        $.get(SERVER_URL + "/button_" + playerNumber);
-    });
+
     
     // we want to query the number of users every 2 seconds
     var repeating_func = setInterval(function() {
@@ -78,25 +52,17 @@ $(document).ready(function () {
             
             if (challenge_three_complete) {
                 // if challenge three is completed, then you win
-                $(".big-title").text("What item do you want?");
+
             } else if (challenge_two_complete) {
                 // show challenge three for player two
                 
             } else if (challenge_one_complete) {
                 // show challenge two for player one
-                if (playerNumber == 'one') {
-                    $(".big-title").text("enter password here");
-                } else if (playerNumber == 'two') {
-                    $(".big-title").text("Look somewhere else!");
-                } else if (playerNumber == 'three') {
-                    $(".big-title").text("Look somewhere else!");
-                } else {
-                    $(".big-title").text("Find the correct QR code.");
-                }
+                
             }
 
         });
-    }, 1000);
+    }, 500);
 });
     
 
