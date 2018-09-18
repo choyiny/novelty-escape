@@ -38,22 +38,18 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 <script>
 // SERVER URL
-var SERVER_URL = "https://novelty-escape.herokuapp.com"
+//var SERVER_URL = "https://novelty-escape.herokuapp.com"
+var SERVER_URL = "http://localhost:5000"
 
 $(document).ready(function () {
     
-    // define the user id
-    var user_id;
-    
-    // define the sequence i am currently at
-    var my_sequence;
-    
-    // generate a unique user id if it does not already exist in localstorage
-    if (localStorage.getItem("user_id")) {
-        user_id = localStorage.getItem("user_id");
+    var url = window.location.href;
+    var name = url.match(/seq=(.*)/);
+    var playerNumber;
+    if (name === null) {
+        $(".big-title").text("find the correct QR code.");
     } else {
-        user_id = Date.now()
-        localStorage.setItem("user_id", user_id)
+        playerNumber = name[1];
     }
     
     // click listener for the button, which supposedly increments the server online count
@@ -66,27 +62,34 @@ $(document).ready(function () {
             $btn.attr("disabled", false);
         }, 5000);
         // send a get request to server
-        $.get(SERVER_URL + "?id=" + user_id, function (data) {
-            my_sequence = +data['your_sequence'];
-        });
+        $.get(SERVER_URL + "/button_" + playerNumber);
     });
     
     // we want to query the number of users every 2 seconds
     var repeating_func = setInterval(function() {
-        $.get(SERVER_URL + "/status", function(data) {
-            var total = +data['result']
+        $.get(SERVER_URL + "/info", function(data) {
+            var total = +data['num_people']
+            var challenge_one_complete = data['challenge_one_complete'];
+            var challenge_two_complete = data['challenge_two_complete'];
+            var challenge_three_complete = data['challenge_three_complete'];
             $(".number-of-people").text(total + "/3")
             
-            if (total >= 3) {
-                // depending on the sequence, show the corresponding password
-                if (my_sequence == 3) {
-                    $(".big-title").text("ST");
-                } else if (my_sequence == 2) {
-                    $(".big-title").text("A");
-                } else if (my_sequence == 1) {
-                    $(".big-title").text("RT");
+            if (challenge_three_complete) {
+                // if challenge three is completed, then you win
+                $(".big-title").text("What item do you want?");
+            } else if (challenge_two_complete) {
+                // show challenge three for player two
+                
+            } else if (challenge_one_complete) {
+                // show challenge two for player one
+                if (playerNumber == 'one') {
+                    $(".big-title").text("enter password here");
+                } else if (playerNumber == 'two') {
+                    $(".big-title").text("Look somewhere else!");
+                } else if (playerNumber == 'three') {
+                    $(".big-title").text("Look somewhere else!");
                 } else {
-                    $(".big-title").text("HAHAHAHAHAAHAHAHAHA TOO LATE");
+                    $(".big-title").text("Find the correct QR code.");
                 }
                 clearInterval(repeating_func);
             }

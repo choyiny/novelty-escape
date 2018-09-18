@@ -1,44 +1,82 @@
 import time
 import json
-from flask import Flask, request, jsonify
+from flask import Flask, request
 app = Flask(__name__)
 
-peopledict = {}
+# global variable to store the state of three endpoints
+person_to_time = {
+    1: 0,
+    2: 0,
+    3: 0,
+}
 
-# cors
-from datetime import timedelta
-from flask import make_response, request, current_app
-from functools import update_wrapper
+challenge_completed = {
+    1: False,
+    2: False,
+    3: False,
+}
 
-@app.route("/", methods=["GET"])
-def enter():
-    """When user send request to website,
-    get his unique id and save it in the
-    set"""
-    user_id = request.args.get('id')
-    peopledict[user_id] = time.time()
 
-    response = jsonify({"your_sequence": len(peopledict)})
+def gen_response(my_dict: dict):
+    """ Helper function to generate a response object that allows CORS. """
+    from flask import jsonify
+    response = jsonify(my_dict)
     response.headers.add('Access-Control-Allow-Origin', '*')
     return response
 
-@app.route("/status")
-def status():
-    """For every call, iterate through the dict.
-    Check every user's request time and compare with
-    current time, if now - start > 10, remove this
-    user from the dict"""
-    things_to_del = set()
-    for user_id in peopledict:
-        request_time = peopledict[user_id]
-        if time.time() - request_time > 2:
-            # everything need to del in dict
-            things_to_del.add(user_id)
+
+@app.route('/info')
+def info():
+    """ Overall info of the puzzles. Every client will ping this every second. """
+    num_people = len([player for player, player_time in person_to_time.items() if time.time() - player_time < 2])
+    result = {
+        'num_people': num_people,
+        'challenge_one_complete': challenge_completed[1],
+        'challenge_two_complete': challenge_completed[2],
+        'challenge_three_complete': challenge_completed[3]
+    }
+
+    # challenge one: num_people must reach 3!
+    if num_people == 3 or challenge_completed[1]:
+        challenge_completed[1] = True
+
+    return gen_response(result)
+
+
+@app.route('/challenge_two')
+def challenge_two():
+    """ Second challenge """
+    if challenge_completed[1] and request.args.get('password') == 'password':
+        return gen_response({'success': True})
+    else:
+        return gen_response({'success': False})
+
+
+@app.route('/challenge_three')
+def challenge_three():
+    """ Third challenge """
+    if challenge_completed[2] and request.args.get('password') == 'password':
+        return gen_response({'success': True})
+    else:
+        return gen_response({'success': False})
+
+
+@app.route('/button_one')
+def button_one():
+    """ First player clicks the button. """
+    person_to_time[0] = time.time()
+    return gen_response({'result': 'ok'})
+
+
+@app.route('/button_two')
+def button_two():
+    """ Second player clicks the button. """
+    person_to_time[1] = time.time()
+    return gen_response({'result': 'ok'})
+
     
-    # del everything that needs to be deleted HAHA
-    for user_id in things_to_del:
-        del peopledict[user_id]
-
-    response = jsonify({'result': len(peopledict)})
-    response.headers.add('Access-Control-Allow-Origin', '*')
-    return response
+@app.route('/button_three')
+def button_three():
+    """ Third player clicks the button. """
+    person_to_time[2] = time.time()
+    return gen_response({'result': 'ok'})
