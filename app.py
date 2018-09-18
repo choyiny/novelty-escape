@@ -25,6 +25,14 @@ def gen_response(my_dict: dict):
     return response
 
 
+@app.route('/reset')
+def reset():
+    """ reset challenges """
+    challenge_completed[1] = False
+    challenge_completed[2] = False
+    challenge_completed[3] = False
+    return gen_response({'result': 'ok'})
+
 @app.route('/info')
 def info():
     """ Overall info of the puzzles. Every client will ping this every second. """
