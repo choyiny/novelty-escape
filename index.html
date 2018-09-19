@@ -85,12 +85,19 @@ $(document).ready(function () {
             } else if (challenge_one_complete) {
                 // show challenge two for player one
                 if (playerNumber == 'one') {
-                    $(".big-title").text("enter password here");
+                    $(".click-me").css('background-color', 'yellow');
+                    $(".big-title").text("")
+                    // $(".big-title").text("enter password here");
                 } else if (playerNumber == 'two') {
-                    $(".big-title").text("Look somewhere else!");
+                    $(".click-me").css('background-color', 'red');
+                    $(".big-title").text("")
+                    // $(".big-title").text("Look somewhere else!");
                 } else if (playerNumber == 'three') {
-                    $(".big-title").text("Look somewhere else!");
-                } else {
+                    $(".click-me").css('background-color', 'green');
+                    $(".big-title").text("")
+                    // $(".big-title").text("Look somewhere else!");
+                }
+                else {
                     $(".big-title").text("Find the correct QR code.");
                 }
             }
