@@ -82,7 +82,7 @@ def info():
     }
 
     # challenge one: num_people must reach 3!
-    if num_people == 1 or challenge_completed[1]:
+    if num_people == 3 or challenge_completed[1]:
         challenge_completed[1] = True
 
     return gen_response(result)
