@@ -21,9 +21,8 @@ challenge_completed = {
 # Y -> Y -> Y -> Y
 color_dict = {
     0:"Y",
-    1:"Y",
-    2:"Y",
-    3:"Y"
+    1:"R",
+    2:"B"
 }
 
 index = 0
