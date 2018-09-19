@@ -67,7 +67,29 @@ $(document).ready(function () {
         $.get(SERVER_URL + "/button_" + playerNumber);
     });
     
-    // we want to query the number of users every 2 seconds
+    // The method that override the original method
+    // when player enter second challenge
+    let override_btn = function(){
+        let color;
+        if (playerNumber == 'one'){
+            color = "Y";
+        }
+        else if(playerNumber == 'two'){
+            color = "R";
+        }
+        else if(playerNumber == 'three'){
+            color = "B";
+        }
+        $.get(SERVER_URL + "/addpattern?color=" + color);
+    }
+
+    let verify_color_pattern = function(){
+        $.get(SERVER_URL + "/verifypattern", function(data){
+            
+        });
+    }
+    
+    // we want to query the number of users every 1 second
     var repeating_func = setInterval(function() {
         $.get(SERVER_URL + "/info", function(data) {
             var total = +data['num_people']
@@ -81,20 +103,26 @@ $(document).ready(function () {
                 $(".big-title").text("What item do you want?");
             } else if (challenge_two_complete) {
                 // show challenge three for player two
-                
+                $(".big-title").text("WELCOME TO CHANLLENGE THREE")
             } else if (challenge_one_complete) {
+                // Override click listener for button
+                // call unbind() to ensure the event only
+                // being fired once
+                $(".click-me").unbind().click(override_btn);
+                // Verify pattern
+                verify_color_pattern();
                 // show challenge two for player one
                 if (playerNumber == 'one') {
                     $(".click-me").css('background-color', 'yellow');
-                    $(".big-title").text("")
+                    $(".big-title").text("YELLOW").css("color", "RED");
                     // $(".big-title").text("enter password here");
                 } else if (playerNumber == 'two') {
                     $(".click-me").css('background-color', 'red');
-                    $(".big-title").text("")
+                    $(".big-title").text("");
                     // $(".big-title").text("Look somewhere else!");
                 } else if (playerNumber == 'three') {
-                    $(".click-me").css('background-color', 'green');
-                    $(".big-title").text("")
+                    $(".click-me").css('background-color', 'blue');
+                    $(".big-title").text("");
                     // $(".big-title").text("Look somewhere else!");
                 }
                 else {

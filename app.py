@@ -16,6 +16,17 @@ challenge_completed = {
     3: False,
 }
 
+# Seq1 = Y, Seq2 = R, Seq3 = B
+# Assume the correct pattern is:
+# Y -> Y -> Y -> Y
+color_dict = {
+    0:"Y",
+    1:"Y",
+    2:"Y",
+    3:"Y"
+}
+
+index = 0
 
 def gen_response(my_dict: dict):
     """ Helper function to generate a response object that allows CORS. """
@@ -24,13 +35,40 @@ def gen_response(my_dict: dict):
     response.headers.add('Access-Control-Allow-Origin', '*')
     return response
 
+@app.route('/addpattern')
+def add_pattern():
+    "Receive color from user"
+    global index
+    # If index is not in color_dict, it means that the
+    # player have solved the puzzle, clicking the button
+    # will not modifying anything anymore
+    if index in color_dict:
+        color = request.args.get('color')
+        # Compare the received color with the correct one
+        # If it is correct, increment index by 1
+        if color == color_dict[index]:
+            index += 1
+        # Otherwise reset index from 0
+        else:
+            index = 0
+    return gen_response({'result': 'ok'})
+
+@app.route("/verifypattern")
+def verify_pattern():
+    """Verify the pattern of the color, if yes, the
+    chanllenge completeted state will be changed"""
+    global index
+    challenge_completed[2] = (index == len(color_dict))
+    return gen_response({'state': index})
 
 @app.route('/reset')
 def reset():
     """ reset challenges """
+    global index
     challenge_completed[1] = False
     challenge_completed[2] = False
     challenge_completed[3] = False
+    index = 0
     return gen_response({'result': 'ok'})
 
 @app.route('/info')
@@ -45,7 +83,7 @@ def info():
     }
 
     # challenge one: num_people must reach 3!
-    if num_people == 3 or challenge_completed[1]:
+    if num_people == 1 or challenge_completed[1]:
         challenge_completed[1] = True
 
     return gen_response(result)
@@ -54,6 +92,7 @@ def info():
 @app.route('/challenge_two')
 def challenge_two():
     """ Second challenge """
+    challenge_completed[2]
     if challenge_completed[1] and request.args.get('password') == 'password':
         return gen_response({'success': True})
     else:
