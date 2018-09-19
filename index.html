@@ -40,8 +40,8 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 <script>
 // SERVER URL
-var SERVER_URL = "https://novelty-escape.herokuapp.com"
-//var SERVER_URL = "http://localhost:5000"
+//var SERVER_URL = "https://novelty-escape.herokuapp.com"
+var SERVER_URL = "http://localhost:5000"
 
 $(document).ready(function () {
     
@@ -64,7 +64,7 @@ $(document).ready(function () {
             $btn.attr("disabled", false);
         }, 5000);
         // send a get request to server
-        $.get(SERVER_URL + "/button_" + playerNumber);
+        $.get(SERVER_URL + "/button?button_number=" + playerNumber);
     });
     
     // The method that override the original method
@@ -83,10 +83,10 @@ $(document).ready(function () {
         $.get(SERVER_URL + "/addpattern?color=" + color);
     }
 
+    // Verify that if players pressed the button in correct
+    // order, if yes, continue to next chanllenge.
     let verify_color_pattern = function(){
-        $.get(SERVER_URL + "/verifypattern", function(data){
-            
-        });
+        $.get(SERVER_URL + "/verifypattern");
     }
     
     // we want to query the number of users every 1 second
@@ -103,7 +103,7 @@ $(document).ready(function () {
                 $(".big-title").text("What item do you want?");
             } else if (challenge_two_complete) {
                 // show challenge three for player two
-                $(".big-title").text("WELCOME TO CHANLLENGE THREE")
+                $(".big-title").text("WELCOME TO CHANLLENGE THREE");
             } else if (challenge_one_complete) {
                 // Override click listener for button
                 // call unbind() to ensure the event only
@@ -119,10 +119,12 @@ $(document).ready(function () {
                 } else if (playerNumber == 'two') {
                     $(".click-me").css('background-color', 'red');
                     $(".big-title").text("");
+                    $(".big-title").text("YELLOW").css("color", "blue");
                     // $(".big-title").text("Look somewhere else!");
                 } else if (playerNumber == 'three') {
                     $(".click-me").css('background-color', 'blue');
                     $(".big-title").text("");
+                    $(".big-title").text("YELLOW").css("color", "yellow");
                     // $(".big-title").text("Look somewhere else!");
                 }
                 else {

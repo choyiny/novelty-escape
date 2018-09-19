@@ -5,9 +5,9 @@ app = Flask(__name__)
 
 # global variable to store the state of three endpoints
 person_to_time = {
-    1: 0,
-    2: 0,
-    3: 0,
+    'one': 0,
+    'two': 0,
+    'three': 0,
 }
 
 challenge_completed = {
@@ -107,22 +107,9 @@ def challenge_three():
         return gen_response({'success': False})
 
 
-@app.route('/button_one')
-def button_one():
+@app.route('/button')
+def press_button():
     """ First player clicks the button. """
-    person_to_time[0] = time.time()
-    return gen_response({'result': 'ok'})
-
-
-@app.route('/button_two')
-def button_two():
-    """ Second player clicks the button. """
-    person_to_time[1] = time.time()
-    return gen_response({'result': 'ok'})
-
-    
-@app.route('/button_three')
-def button_three():
-    """ Third player clicks the button. """
-    person_to_time[2] = time.time()
+    button_num = request.args.get('button_number')
+    person_to_time[button_num] = time.time()
     return gen_response({'result': 'ok'})
