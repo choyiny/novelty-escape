@@ -56,7 +56,6 @@ def last_second():
 
 def get_sentence():
     players = last_second()
-    print(players)
     # Hard coding every case
     if players[0] == '' and players[1] == '' and players[2] == '':
         return rearrange_sentence[0]
@@ -91,13 +90,10 @@ def add_pattern():
     # If index is not in color_dict, it means that the
     # player have solved the puzzle, clicking the button
     # will not modifying anything anymore
-    if index in color_password_list:
+    if index != len(color_password_list):
         color = request.args.get('color')
-        # Compare the received color with the correct one
-        # If it is correct, increment index by 1
         if color == color_password_list[index]:
             index += 1
-        # Otherwise reset index from 0
         else:
             index = 0
     return gen_response({'result': 'ok'})
