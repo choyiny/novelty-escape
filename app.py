@@ -74,11 +74,24 @@ def reset():
 def info():
     """ Overall info of the puzzles. Every client will ping this every second. """
     num_people = len([player for player, player_time in person_to_time.items() if time.time() - player_time < 2])
+    
+    # obtain display text depending on challenge completed
+    # if challenge 2 is completed, show challenge 3 text
+    if challenge_completed[2]:
+        pass
+    # if challenge 1 is completed, show challenge 2 text
+    elif challenge_completed[1]:
+        display_text = "LOOK AT ALLEN WONG"
+    # nothing is completed, show 1/3, 2/3 or 3/3
+    else:
+        display_text = f"{num_people}/3"
+            
     result = {
         'num_people': num_people,
         'challenge_one_complete': challenge_completed[1],
         'challenge_two_complete': challenge_completed[2],
-        'challenge_three_complete': challenge_completed[3]
+        'challenge_three_complete': challenge_completed[3],
+        'tv_display': display_text;
     }
 
     # challenge one: num_people must reach 3!
