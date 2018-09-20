@@ -24,7 +24,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-10 col-lg-10 col-md-offset-1 col-lg-offset-1 text-center">
-                    <h1 class="title number-of-people">0/3</h1>
+                    <h1 class="title display">0/3</h1>
                 </div>
             </div>
         </div>
@@ -38,29 +38,15 @@
 // SERVER URL
 var SERVER_URL = "https://novelty-escape.herokuapp.com"
 
-$(document).ready(function () {
-
-    
-    // we want to query the number of users every 2 seconds
+$(document).ready(function () {    
+    // we want to query the number of users every 0.5 seconds
     var repeating_func = setInterval(function() {
         $.get(SERVER_URL + "/info", function(data) {
-            var total = +data['num_people']
+            var displayText = data['tv_display'];
             var challenge_one_complete = data['challenge_one_complete'];
             var challenge_two_complete = data['challenge_two_complete'];
             var challenge_three_complete = data['challenge_three_complete'];
-            $(".number-of-people").text(total + "/3")
-            
-            if (challenge_three_complete) {
-                // if challenge three is completed, then you win
-
-            } else if (challenge_two_complete) {
-                // show challenge three for player two
-                
-            } else if (challenge_one_complete) {
-                // show challenge two for player one
-                
-            }
-
+            $(".display").text(displayText);
         });
     }, 500);
 });
