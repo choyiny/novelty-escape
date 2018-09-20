@@ -50,7 +50,7 @@
 <script>
 // SERVER URL
 var SERVER_URL = "https://novelty-escape.herokuapp.com"
-//var SERVER_URL = "http://localhost:5000"
+// var SERVER_URL = "http://localhost:5000"
 
 $(document).ready(function () {
 
@@ -92,6 +92,10 @@ $(document).ready(function () {
         $.get(SERVER_URL + "/addpattern?color=" + color);
     }
 
+    let override_btn_c3 = function(){
+        $.get(SERVER_URL + "/button?button_number=" + playerNumber);
+    }
+
     // Verify that if players pressed the button in correct
     // order, if yes, continue to next chanllenge.
     let verify_color_pattern = function(){
@@ -113,6 +117,7 @@ $(document).ready(function () {
             } else if (challenge_two_complete) {
                 // show challenge three for player two
                 $(".big-title").text("WELCOME TO CHANLLENGE THREE");
+                $(".click-me").unbind().click(override_btn_c3)
             } else if (challenge_one_complete) {
                 // Override click listener for button
                 // call unbind() to ensure the event only

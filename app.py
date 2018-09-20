@@ -1,5 +1,7 @@
 import time
 import json
+import random
+import operator
 from flask import Flask, request
 app = Flask(__name__)
 
@@ -21,11 +23,61 @@ challenge_completed = {
 # Y -> Y -> Y -> Y
 color_dict = {
     0:"Y",
-    1:"R",
-    2:"B"
+    1:"Y",
+    2:"Y"
 }
 
+# List of sentences that will be distributed
+sentence = [
+    "tell",
+    "the",
+    "station",
+    "leader",
+    "which",
+    "item",
+    "you",
+    "want"
+]
+
+# Copy correct sentence and shuffle it
+rearrange_sentence = sentence[:]
+random.shuffle(rearrange_sentence)
+
 index = 0
+
+def last_second():
+    "Get a list of player that clicks the button in 5s"
+    delay = 5
+    l = ['', '', '']
+    index = 0
+    for player in person_to_time:
+        if time.time() - person_to_time[player] < delay:
+            l[index] = player
+        index += 1
+    return l
+
+
+def get_sentence():
+    players = last_second()
+    print(players)
+    # Hard coding every case
+    if players[0] == '' and players[1] == '' and players[2] == '':
+        return rearrange_sentence[0]
+    if players[0] == '' and players[1] == '' and players[2] != '':
+        return rearrange_sentence[1]
+    if players[0] == '' and players[1] != '' and players[2] == '':
+        return rearrange_sentence[2]
+    if players[0] != '' and players[1] == '' and players[2] == '':
+        return rearrange_sentence[3]
+    if players[0] == '' and players[1] != '' and players[2] != '':
+        return rearrange_sentence[4]
+    if players[0] != '' and players[1] != '' and players[2] == '':
+        return rearrange_sentence[5]
+    if players[0] != '' and players[1] == '' and players[2] != '':
+        return rearrange_sentence[6]
+    if players[0] != '' and players[1] != '' and players[2] != '':
+        return rearrange_sentence[7]
+
 
 def gen_response(my_dict: dict):
     """ Helper function to generate a response object that allows CORS. """
@@ -33,6 +85,7 @@ def gen_response(my_dict: dict):
     response = jsonify(my_dict)
     response.headers.add('Access-Control-Allow-Origin', '*')
     return response
+
 
 @app.route('/addpattern')
 def add_pattern():
@@ -52,13 +105,16 @@ def add_pattern():
             index = 0
     return gen_response({'result': 'ok'})
 
+
 @app.route("/verifypattern")
 def verify_pattern():
     """Verify the pattern of the color, if yes, the
     chanllenge completeted state will be changed"""
     global index
-    challenge_completed[2] = (index == len(color_dict))
+    if index == len(color_dict):
+        challenge_completed[2] = True
     return gen_response({'state': index})
+
 
 @app.route('/reset')
 def reset():
@@ -68,7 +124,9 @@ def reset():
     challenge_completed[2] = False
     challenge_completed[3] = False
     index = 0
+    random.shuffle(rearrange_sentence)
     return gen_response({'result': 'ok'})
+
 
 @app.route('/info')
 def info():
@@ -78,7 +136,7 @@ def info():
     # obtain display text depending on challenge completed
     # if challenge 2 is completed, show challenge 3 text
     if challenge_completed[2]:
-        pass
+        display_text = get_sentence()
     # if challenge 1 is completed, show challenge 2 text
     elif challenge_completed[1]:
         display_text = "LOOK AT ALLEN WONG"
@@ -99,25 +157,6 @@ def info():
         challenge_completed[1] = True
 
     return gen_response(result)
-
-
-@app.route('/challenge_two')
-def challenge_two():
-    """ Second challenge """
-    challenge_completed[2]
-    if challenge_completed[1] and request.args.get('password') == 'password':
-        return gen_response({'success': True})
-    else:
-        return gen_response({'success': False})
-
-
-@app.route('/challenge_three')
-def challenge_three():
-    """ Third challenge """
-    if challenge_completed[2] and request.args.get('password') == 'password':
-        return gen_response({'success': True})
-    else:
-        return gen_response({'success': False})
 
 
 @app.route('/button')
