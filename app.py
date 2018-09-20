@@ -21,7 +21,8 @@ challenge_completed = {
 # Seq1 = Y, Seq2 = R, Seq3 = B
 # Assume the correct pattern is:
 # Y -> Y -> Y -> Y
-color_password_list = ["Y", "R", "R", "B", "Y", "Y"]
+# color_password_list = ["Y", "R", "R", "B", "Y", "Y"]
+color_password_list = ["Y", "Y", "Y"]
 
 # List of words that will be distributed
 words = [
