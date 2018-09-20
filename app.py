@@ -7,9 +7,9 @@ app = Flask(__name__)
 
 # global variable to store the state of three endpoints
 person_to_time = {
-    'one': 0,
-    'two': 0,
-    'three': 0,
+    'one': 0.0,
+    'two': 0.0,
+    'three': 0.0,
 }
 
 challenge_completed = {
@@ -21,14 +21,10 @@ challenge_completed = {
 # Seq1 = Y, Seq2 = R, Seq3 = B
 # Assume the correct pattern is:
 # Y -> Y -> Y -> Y
-color_dict = {
-    0:"Y",
-    1:"Y",
-    2:"Y"
-}
+color_password_list = ["Y", "R", "R", "B", "Y", "Y"]
 
-# List of sentences that will be distributed
-sentence = [
+# List of words that will be distributed
+words = [
     "tell",
     "the",
     "station",
@@ -40,7 +36,7 @@ sentence = [
 ]
 
 # Copy correct sentence and shuffle it
-rearrange_sentence = sentence[:]
+rearrange_sentence = words[:]
 random.shuffle(rearrange_sentence)
 
 index = 0
@@ -89,16 +85,16 @@ def gen_response(my_dict: dict):
 
 @app.route('/addpattern')
 def add_pattern():
-    "Receive color from user"
+    """" Receive color from user """
     global index
     # If index is not in color_dict, it means that the
     # player have solved the puzzle, clicking the button
     # will not modifying anything anymore
-    if index in color_dict:
+    if index in color_password_list:
         color = request.args.get('color')
         # Compare the received color with the correct one
         # If it is correct, increment index by 1
-        if color == color_dict[index]:
+        if color == color_password_list[index]:
             index += 1
         # Otherwise reset index from 0
         else:
@@ -111,7 +107,7 @@ def verify_pattern():
     """Verify the pattern of the color, if yes, the
     chanllenge completeted state will be changed"""
     global index
-    if index == len(color_dict):
+    if index == len(color_password_list):
         challenge_completed[2] = True
     return gen_response({'state': index})
 
@@ -139,7 +135,7 @@ def info():
         display_text = get_sentence()
     # if challenge 1 is completed, show challenge 2 text
     elif challenge_completed[1]:
-        display_text = "LOOK AT ALLEN WONG"
+        display_text = "GROUP 10 IS THE KEY"
     # nothing is completed, show 1/3, 2/3 or 3/3
     else:
         display_text = f"{num_people}/3"
