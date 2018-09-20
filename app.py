@@ -22,7 +22,7 @@ challenge_completed = {
 # Assume the correct pattern is:
 # Y -> Y -> Y -> Y
 # color_password_list = ["Y", "R", "R", "B", "Y", "Y"]
-color_password_list = ["Y", "Y", "Y"]
+color_password_list = ["Y", "R", "B", "Y", "Y", "B"]
 
 # List of words that will be distributed
 words = [
