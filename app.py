@@ -91,7 +91,7 @@ def info():
         'challenge_one_complete': challenge_completed[1],
         'challenge_two_complete': challenge_completed[2],
         'challenge_three_complete': challenge_completed[3],
-        'tv_display': display_text;
+        'tv_display': display_text
     }
 
     # challenge one: num_people must reach 3!
