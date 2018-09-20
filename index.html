@@ -18,6 +18,15 @@
             width: 250px;
             border-radius: 1000px;
             background-color: #651717;
+            box-shadow: 0 9px #999;
+        }
+        .click-me:hover {
+          background-color: #4CAF50
+        }
+        .click-me:active {
+          background-color: #3e8e41;
+          box-shadow: 0 5px #666;
+          transform: translateY(4px);
         }
         .title.big-title {
             font-family: 'Great Vibes', cursive;
@@ -43,8 +52,8 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 <script>
 // SERVER URL
-var SERVER_URL = "https://novelty-escape.herokuapp.com"
-//var SERVER_URL = "http://localhost:5000"
+//var SERVER_URL = "https://novelty-escape.herokuapp.com"
+var SERVER_URL = "http://localhost:5000"
 
 $(document).ready(function () {
 
