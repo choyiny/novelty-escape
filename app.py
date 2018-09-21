@@ -43,8 +43,8 @@ random.shuffle(rearrange_sentence)
 index = 0
 
 def last_second():
-    "Get a list of player that clicks the button in 5s"
-    delay = 5
+    """Get a list of player that clicks the button in 5s"""
+    delay = 1
     l = ['', '', '']
     index = 0
     for player in person_to_time:
