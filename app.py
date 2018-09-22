@@ -132,7 +132,7 @@ def info():
         display_text = get_sentence()
     # if challenge 1 is completed, show challenge 2 text
     elif challenge_completed[1]:
-        display_text = "GROUP 10 IS THE KEY"
+        display_text = "LOOK AT GROUP 10"
     # nothing is completed, show 1/3, 2/3 or 3/3
     else:
         display_text = f"{num_people}/3"
