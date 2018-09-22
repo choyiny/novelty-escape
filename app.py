@@ -26,14 +26,14 @@ color_password_list = ["Y", "R", "B", "Y", "Y", "B"]
 
 # List of words that will be distributed
 words = [
-    "tell",
-    "the",
-    "station",
-    "leader",
-    "which",
-    "item",
     "you",
-    "want"
+    "must",
+    "bow",
+    "down",
+    "to",
+    "your",
+    "station",
+    "leader"
 ]
 
 # Copy correct sentence and shuffle it
@@ -132,7 +132,7 @@ def info():
         display_text = get_sentence()
     # if challenge 1 is completed, show challenge 2 text
     elif challenge_completed[1]:
-        display_text = "LOOK AT GROUP 10"
+        display_text = "INFECTED GROUP 10"
     # nothing is completed, show 1/3, 2/3 or 3/3
     else:
         display_text = f"{num_people}/3"
