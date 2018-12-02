@@ -1,8 +1,9 @@
 # novelty-escape
-A discovery project into using technology to enhance interactions in University Orientation station games.
+A discovery project into using technology to enhance interactions in University Orientation station games. Project used in this event: https://www.facebook.com/events/261051731289951/
 
 ## Introduction
 This Flask application is built for the Orientation hosted by the University of Toronto Scarborough's Novelty Cantonese Students' Association.
+
 The application served as a station game for the Orientation - the escape room. Players have to solve three challenges using their phone based on this app.
 
 ## Controllers
